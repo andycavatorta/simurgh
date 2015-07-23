@@ -3,7 +3,6 @@ import smtplib
 import socket
 from email.mime.text import MIMEText
 import datetime
-# Change to your own account information
 to = 'andycavatorta@gmail.com'
 gmail_user = 'andycavatorta@gmail.com'
 gmail_password = 'Awaylfot56'
