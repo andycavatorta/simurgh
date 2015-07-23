@@ -1,11 +1,16 @@
 in raspi-config
   set hostname
   activate SSH
-
-in sudo nano /etc/rc.local
-    sudo /home/simurgh/main.py  &
-
-add 2nd, static IP address
+  configure keyboard
 
 set up git
+   check gitSetup.sh
+
+in sudo nano /etc/rc.local
+    sudo /home/pi/simurgh/main.py  &
+
+in sudo vi /etc/cron.d/sync_git_repos
+*/5 * * * * app cd /home/pi/simurgh/ && git pull -q --all -p
+
+awdd 2nd, static IP address
 
