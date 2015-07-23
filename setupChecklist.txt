@@ -1,0 +1,11 @@
+in raspi-config
+  set hostname
+  activate SSH
+
+in sudo nano /etc/rc.local
+    sudo /home/simurgh/main.py  &
+
+add 2nd, static IP address
+
+set up git
+
