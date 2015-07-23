@@ -1,4 +1,4 @@
-print "!!!!!!!!!!!!!!!!!!"
+print "+++++++++++++"
 
 from common import  emailIp
 
