@@ -6,6 +6,9 @@
 import commands
 import socket
 
+hostnames = ['controller','ray1','ray2','ray3','ray4','ray5','ray6','ray7','ray8','ray9','ray10','ray11','ray12']
+staticIpAddresses = ['10.1.1.10','10.1.1.11','10.1.1.12','10.1.1.13','10.1.1.14','10.1.1.15','10.1.1.16','10.1.1.17','10.1.1.18','10.1.1.19','10.1.1.20','10.1.1.21','10.1.1.22',]
+
 cmd = "ip addr list eth0 |grep \"inet \" |cut -d' ' -f6|cut -d/ -f1"
 resp = commands.getstatusoutput(cmd)
 print resp
@@ -19,8 +22,11 @@ if IP:
     # email IP
     from common import  emailIp
 else:
-    pass
+    staticIpAddress = staticIpAddresses(hostnames.index(HOSTNAME))
+    cmd = "ip addr add %s dev eth0" %s (staticIpAddress)
+    print "cmd = ", cmd
+    resp = commands.getstatusoutput(cmd)
+    print resp
     # assign static IP
-
 
 

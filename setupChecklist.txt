@@ -10,8 +10,5 @@ in sudo nano /etc/rc.local
     cd /home/pi/simurgh/ && git pull -q --all -p
     sudo python /home/pi/simurgh/main.py  &
 
-in sudo vi /etc/cron.d/sync_git_repos
-*/5 * * * * app cd /home/pi/simurgh/ && git pull -q --all -p
-
 add 2nd, static IP address
 
