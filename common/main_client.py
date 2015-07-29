@@ -18,6 +18,7 @@ measure duration
 
 
 """
+print "loaded common/main_client.py"
 
 import socket
 import time
