@@ -65,7 +65,8 @@ def Recv():
         client, address = s.accept() 
         data = client.recv(size) 
         if data: 
-            client.send(data) 
+            print "Recv()", data
+            #client.send(data) 
         client.close()
 
 recv = threading.Thread(target=Recv)
