@@ -65,7 +65,7 @@ def Recv():
         client, address = s.accept() 
         data = client.recv(size) 
         if data: 
-            print "Recv()", data
+            print "Recv()", data, address
             #client.send(data) 
         client.close()
 
