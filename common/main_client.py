@@ -80,10 +80,10 @@ def main(hostname, ip):
     global IP
     HOSTNAME = hostname
     IP = ip
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
-    for pin in SENSOR_PINS:
-        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
+    #GPIO.setmode(GPIO.BOARD)
+    #GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
+    #for pin in SENSOR_PINS:
+    #    GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
     msg = "%s|%s" % (HOSTNAME, IP)
     while SERVER_IP == "":
         broadcastIpToServer(msg)
