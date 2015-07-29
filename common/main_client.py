@@ -50,6 +50,7 @@ def broadcastIpToServer(msg):
     MCAST_PORT = 10000
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
+    print "common/main_client.py broadcastIpToServer()", msg
     sock.sendto(msg, (MCAST_GRP, MCAST_PORT))
 
 def Recv():
