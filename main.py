@@ -34,6 +34,6 @@ if HOSTNAME == 'controller':
     main_server.main(hostnames, 50000)
 else:
     from common import main_client
-    main_client.main()
+    main_client.main(HOSTNAME,IP)
 
 
