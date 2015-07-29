@@ -65,10 +65,12 @@ def Recv():
         client, address = s.accept() 
         data = client.recv(size) 
         if data: 
+            global SERVER_IP
+            SERVER_IP = address[0]
             print "Recv()", data, address
             #client.send(data) 
         client.close()
-
+/
 recv = threading.Thread(target=Recv)
 recv.start()
 
@@ -90,5 +92,5 @@ def main(hostname, ip):
     while SERVER_IP == "":
         broadcastIpToServer(msg)
         time.sleep(1)
-    recvFromServer()
+    #recvFromServer()
 
