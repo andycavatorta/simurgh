@@ -22,11 +22,17 @@ if IP:
     # email IP
     from common import  emailIp
 else:
-    staticIpAddress = staticIpAddresses(hostnames.index(HOSTNAME))
-    cmd = "ip addr add %s dev eth0" %s (staticIpAddress)
+    staticIpAddress = staticIpAddresses[hostnames.index(HOSTNAME)]
+    cmd = "ip addr add %s dev eth0" % (staticIpAddress)
     print "cmd = ", cmd
     resp = commands.getstatusoutput(cmd)
     print resp
     # assign static IP
+
+if HOSTNAME = 'controller':
+    from common import main_server
+    main_server.main(hostnames, 50000)
+else:
+    from common import main_client
 
 
