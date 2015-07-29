@@ -16,10 +16,10 @@ IP = resp[1]
 HOSTNAME = socket.gethostname()
 
 if IP:
-    # git pull
+    #git pull
     #cmd = "cd /home/pi/simurgh/ && git pull -q --all -p"
     #resp = commands.getstatusoutput(cmd)
-    # email IP
+    #email IP
     from common import  emailIp
 else:
     staticIpAddress = staticIpAddresses[hostnames.index(HOSTNAME)]
@@ -29,7 +29,7 @@ else:
     print resp
     # assign static IP
 
-if HOSTNAME = 'controller':
+if HOSTNAME == 'controller':
     from common import main_server
     main_server.main(hostnames, 50000)
 else:
