@@ -69,10 +69,9 @@ recv = threading.Thread(target=Recv)
 
 # turn on / turn off
 def turn(b):
-
     pass
 
-main(hostname, ip):
+def main(hostname, ip):
     global HOSTNAME
     global IP
     HOSTNAME = hostname
