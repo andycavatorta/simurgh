@@ -70,7 +70,7 @@ def Recv():
         client.close()
 
 recv = threading.Thread(target=Recv)
-#recv.start()
+recv.start()
 
 # turn on / turn off
 def turn(b):
