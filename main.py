@@ -17,8 +17,8 @@ HOSTNAME = socket.gethostname()
 
 if IP:
     # git pull
-    cmd = "cd /home/pi/simurgh/ && git pull -q --all -p"
-    resp = commands.getstatusoutput(cmd)
+    #cmd = "cd /home/pi/simurgh/ && git pull -q --all -p"
+    #resp = commands.getstatusoutput(cmd)
     # email IP
     from common import  emailIp
 else:
