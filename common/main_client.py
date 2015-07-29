@@ -70,7 +70,7 @@ def Recv():
             print "Recv()", data, address
             #client.send(data) 
         client.close()
-/
+
 recv = threading.Thread(target=Recv)
 recv.start()
 
