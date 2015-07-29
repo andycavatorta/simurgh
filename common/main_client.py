@@ -21,6 +21,7 @@ measure duration
 
 import socket
 import time
+import threading
 import RPi.GPIO as GPIO
 
 HOSTNAME = ""
