@@ -81,7 +81,7 @@ def Recv():
             if data == "endTurn":
                 endTurn()
             lastContactTime = time.time()
-            #client.send(data) 
+            client.send("x") 
         client.close()
 
 recv = threading.Thread(target=Recv)
