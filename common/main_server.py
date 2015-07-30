@@ -100,7 +100,7 @@ def ControlLoop():
             if clientmanager.clients[host_current].present:
                 clientmanager.send(host_current, "startTurn")
             if clientmanager.clients[host_next].present:
-                clientmanager.send(host_next, "sensorData")
+                clientmanager.send(host_next, "getSensorData")
             turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD       
             time.sleep(turnPeriod)
 

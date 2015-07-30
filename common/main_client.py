@@ -70,9 +70,16 @@ def Recv():
         client, address = s.accept() 
         data = client.recv(size) 
         if data: 
-            global SERVER_IP
-            SERVER_IP = address[0]
-            print "Recv()", data, address
+            if SERVER_IP == "":
+                global SERVER_IP
+                SERVER_IP = address[0]
+            if data == "getSensorData":
+                sd = getSensorData()
+                print sd
+            if data == "startTurn":
+                startTurn()
+            if data == "endTurn":
+                endTurn()
             lastContactTime = time.time()
             #client.send(data) 
         client.close()
@@ -86,8 +93,18 @@ def startTurn():
 def endTurn():
     pass
 
-def sensorData():
-    return [0,0]
+def getSensorData():
+    socket =  False
+    for p in SENSOR_PINS:
+        if GPIO.input(p):
+            socket = p
+            break
+    beats = 2
+    if GPIO.input(SWITCH_PINS[0]):
+        beats = 1
+    if GPIO.input(SWITCH_PINS[1]):
+        beats = 4
+    return [socket,beats]
 
 
 lastContactTime = 0
