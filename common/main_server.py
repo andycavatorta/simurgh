@@ -9,14 +9,13 @@ server->client:
     request bulb and switch position
 
 """
-
+import json
 import socket
 import struct
 import time
 import threading
  
 BEAT_PERIOD = 0.25
-
 clientmanager = False
 
 # move to thread
@@ -52,14 +51,16 @@ class ClientManager():
     def send(self, hostname, msg):
         client = self.clients[hostname]
         if self.clients[hostname].present:
-            size = 1024 
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-            s.connect((client.ip,self.clientPort)) 
-            s.send(msg) 
-            data = s.recv(self.maxMsgSize) 
-            s.close() 
-            print data
-            return data
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+                s.connect((client.ip,self.clientPort)) 
+                s.send(msg) 
+                data = s.recv(self.maxMsgSize) 
+                s.close() 
+                print data
+                return data
+            except Exception as e:
+                self.clients[hostname].present = False
 
 
 class Client():
@@ -78,26 +79,37 @@ class Client():
     def setPitch(self,pitch):
         self.pitch = pitch
 
-def Timer():
+def ControlLoop():
     justhosts_l = clientmanager.clients.keys()
     justhosts_l.sort()
-    justhosts_l = justhosts_l[1:] 
+    justhosts_l = justhosts_l[1:]
+    # msgs = ["startTurn","endTurn","sensorData"]
     while 1:
-        for host in justhosts_l:
-            print host
-            if clientmanager.clients[host].present:
-                clientmanager.send(host, "++++++++")
-            turnPeriod = clientmanager.clients[host].noteLength * BEAT_PERIOD       
-            time.sleep(turnPeriod)
-            #BEATLENGHT
+        for hi in range(len(justhosts_l)):
+            host_previous = justhosts_l[ hi - 1 ] 
+            host_current = justhosts_l[ hi ]
+            host_next = justhosts_l[ hi  - (len(justhosts_l)-1) ]
 
+            print "host_previous",host_previous
+            print "host_current", host_current
+            print "host_next",host_next
+            print 
+
+            if clientmanager.clients[host_previous].present:
+                clientmanager.send(host_previous, "endTurn")
+            if clientmanager.clients[host_current].present:
+                clientmanager.send(host_current, "startTurn")
+            if clientmanager.clients[host_next].present:
+                clientmanager.send(host_next, "sensorData")
+            turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD       
+            time.sleep(turnPeriod)
 
 def main(client_hostnames_l, clientPort):
     global clientmanager
     clientmanager = ClientManager(client_hostnames_l,clientPort)
     recv = threading.Thread(target=Recv)
     recv.start()
-    timer = threading.Thread(target=Timer)
-    timer.start()
+    controlloop = threading.Thread(target=ControlLoop)
+    controlloop.start()
 
 main(['controller','ray01','ray02','ray03','ray04','ray05','ray06','ray07','ray08','ray09','ray10','ray11','ray12'],50000)

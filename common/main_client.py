@@ -15,11 +15,9 @@ threads:
 discover server
 listen for messages
 measure duration
-
-
 """
-print "loaded common/main_client.py 1"
 
+import json
 import socket
 import time
 import threading
