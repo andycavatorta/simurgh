@@ -26,7 +26,7 @@ import RPi.GPIO as GPIO
 HOSTNAME = ""
 IP = ""
 SERVER_IP = ""
-POWER_RELAY_PIN = 36
+POWER_RELAY_PIN = 37
 SENSOR_PINS = [
     11,
     12,
@@ -35,15 +35,14 @@ SENSOR_PINS = [
     16,
     18,
     22,
-    27,
     28,
     29,
     31,
-    32,
+    33,
 ]
 SWITCH_PINS = [
-    33,
-    35
+    35,
+    36
 ]
 
 
