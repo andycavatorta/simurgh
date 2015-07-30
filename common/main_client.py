@@ -47,12 +47,15 @@ SWITCH_PINS = [
 
 
 def broadcastIpToServer(msg):
-    MCAST_GRP = '224.0.0.1'
-    MCAST_PORT = 10000
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
-    print "common/main_client.py broadcastIpToServer()", msg
-    sock.sendto(msg, (MCAST_GRP, MCAST_PORT))
+    try:
+        MCAST_GRP = '224.0.0.1'
+        MCAST_PORT = 10000
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
+        print "common/main_client.py broadcastIpToServer()", msg
+        sock.sendto(msg, (MCAST_GRP, MCAST_PORT))
+    except Exception as e:
+        print repr(e)
 
 def Recv():
     host = '' 
@@ -89,11 +92,11 @@ def main(hostname, ip):
     global IP
     HOSTNAME = hostname
     IP = ip
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
-    for pin in SENSOR_PINS:
-        print "sensorPin=", pin
-        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setmode(GPIO.BOARD)
+    #GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
+    #for pin in SENSOR_PINS:
+    #    print "sensorPin=", pin
+    #    GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
     msg = "%s|%s" % (HOSTNAME, IP)
     while SERVER_IP == "":
         broadcastIpToServer(msg)
