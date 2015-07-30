@@ -84,7 +84,7 @@ def endTurn():
     pass
 
 def sensorData():
-    return []
+    return [0,0]
 
 def main(hostname, ip):
     print "main_client.main()"
@@ -96,7 +96,7 @@ def main(hostname, ip):
     GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
     for pin in SENSOR_PINS:
         print "sensorPin=", pin
-        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(24,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
     msg = "%s|%s" % (HOSTNAME, IP)
     while SERVER_IP == "":
         broadcastIpToServer(msg)
