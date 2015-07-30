@@ -70,8 +70,8 @@ def Recv():
         client, address = s.accept() 
         data = client.recv(size) 
         if data: 
+            global SERVER_IP
             if SERVER_IP == "":
-                global SERVER_IP
                 SERVER_IP = address[0]
             if data == "getSensorData":
                 sd = getSensorData()
@@ -88,10 +88,10 @@ recv = threading.Thread(target=Recv)
 recv.start()
 
 def startTurn():
-    pass
+    GPIO.output(POWER_RELAY_PIN,1)
 
 def endTurn():
-    pass
+    GPIO.output(POWER_RELAY_PIN,0)
 
 def getSensorData():
     socket =  False
@@ -106,7 +106,6 @@ def getSensorData():
         beats = 4
     return [socket,beats]
 
-
 lastContactTime = 0
 serverTimeout = 5.0
 def ControlLoop():
@@ -115,7 +114,6 @@ def ControlLoop():
             msg = "%s|%s" % (HOSTNAME, IP)
             broadcastIpToServer(msg)
         time.sleep(1)
-
 
 def main(hostname, ip):
     global HOSTNAME
