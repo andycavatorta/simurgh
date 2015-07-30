@@ -92,7 +92,7 @@ def main(hostname, ip):
     global IP
     HOSTNAME = hostname
     IP = ip
-    GPIO.setmode(GPIO.BOARD)
+    #GPIO.setmode(GPIO.BOARD)
     #GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
     #for pin in SENSOR_PINS:
     #    print "sensorPin=", pin
