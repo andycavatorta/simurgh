@@ -58,6 +58,7 @@ def broadcastIpToServer(msg):
         print repr(e)
 
 def Recv():
+    global lastContactTime
     host = '' 
     port = 50000 
     backlog = 5 
@@ -72,6 +73,7 @@ def Recv():
             global SERVER_IP
             SERVER_IP = address[0]
             print "Recv()", data, address
+            lastContactTime = time.time()
             #client.send(data) 
         client.close()
 
@@ -87,6 +89,16 @@ def endTurn():
 def sensorData():
     return [0,0]
 
+
+lastContactTime = 0
+serverTimeout = 5.0
+def ControlLoop():
+    if SERVER_IP == "" or time.time() - lastContactTime > serverTimeout: # if server is missing
+        msg = "%s|%s" % (HOSTNAME, IP)
+        broadcastIpToServer(msg)
+    time.sleep(1)
+
+
 def main(hostname, ip):
     global HOSTNAME
     global IP
@@ -97,8 +109,9 @@ def main(hostname, ip):
     #for pin in SENSOR_PINS:
     #    print "sensorPin=", pin
     #    GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
-    msg = "%s|%s" % (HOSTNAME, IP)
-    while SERVER_IP == "":
-        broadcastIpToServer(msg)
-        time.sleep(1)
-
+    #msg = "%s|%s" % (HOSTNAME, IP)
+    #while SERVER_IP == "":
+    #    broadcastIpToServer(msg)
+    #    time.sleep(1)
+    controlloop = threading.Thread(target=ControlLoop)
+    controlloop.start()
