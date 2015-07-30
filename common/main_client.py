@@ -74,14 +74,18 @@ def Recv():
             if SERVER_IP == "":
                 SERVER_IP = address[0]
             if data == "getSensorData":
-                sd = getSensorData()
-                print sd
+                sd_l = getSensorData()
+                sd_j = json.dumps(sd_l)
+                client.send(sd_j)
+                #print sd
             if data == "startTurn":
                 startTurn()
+                client.send("")
             if data == "endTurn":
                 endTurn()
+                client.send("")
             lastContactTime = time.time()
-            client.send("x") 
+             
         client.close()
 
 recv = threading.Thread(target=Recv)
