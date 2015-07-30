@@ -26,7 +26,7 @@ import RPi.GPIO as GPIO
 HOSTNAME = ""
 IP = ""
 SERVER_IP = ""
-POWER_RELAY_PIN = 13
+POWER_RELAY_PIN = 16
 SENSOR_PINS = [
     1,
     2,
@@ -40,6 +40,11 @@ SENSOR_PINS = [
     10,
     11,
     12,
+]
+SWITCH_PINS = [
+    13,
+    14,
+    15
 ]
 
 
@@ -79,7 +84,7 @@ def endTurn():
     pass
 
 def sensorData():
-
+    return []
 
 def main(hostname, ip):
     print "main_client.main()"
