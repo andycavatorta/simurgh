@@ -26,7 +26,7 @@ import RPi.GPIO as GPIO
 HOSTNAME = ""
 IP = ""
 SERVER_IP = ""
-POWER_RELAY_PIN = 20
+POWER_RELAY_PIN = 13
 SENSOR_PINS = [
     1,
     2,
@@ -72,9 +72,14 @@ def Recv():
 recv = threading.Thread(target=Recv)
 recv.start()
 
-# turn on / turn off
-def turn(b):
+def startTurn():
     pass
+
+def endTurn():
+    pass
+
+def sensorData():
+
 
 def main(hostname, ip):
     print "main_client.main()"
@@ -82,10 +87,11 @@ def main(hostname, ip):
     global IP
     HOSTNAME = hostname
     IP = ip
-    #GPIO.setmode(GPIO.BOARD)
-    #GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
-    #for pin in SENSOR_PINS:
-    #    GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
+    for pin in SENSOR_PINS:
+        print "sensorPin=", pin
+        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
     msg = "%s|%s" % (HOSTNAME, IP)
     while SERVER_IP == "":
         broadcastIpToServer(msg)
