@@ -93,10 +93,11 @@ def sensorData():
 lastContactTime = 0
 serverTimeout = 5.0
 def ControlLoop():
-    if SERVER_IP == "" or time.time() - lastContactTime > serverTimeout: # if server is missing
-        msg = "%s|%s" % (HOSTNAME, IP)
-        broadcastIpToServer(msg)
-    time.sleep(1)
+    while 1:
+        if SERVER_IP == "" or time.time() - lastContactTime > serverTimeout: # if server is missing
+            msg = "%s|%s" % (HOSTNAME, IP)
+            broadcastIpToServer(msg)
+        time.sleep(1)
 
 
 def main(hostname, ip):
