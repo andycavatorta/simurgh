@@ -26,25 +26,24 @@ import RPi.GPIO as GPIO
 HOSTNAME = ""
 IP = ""
 SERVER_IP = ""
-POWER_RELAY_PIN = 16
+POWER_RELAY_PIN = 36
 SENSOR_PINS = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
     11,
     12,
+    13,
+    15,
+    16,
+    18,
+    22,
+    27,
+    28,
+    29,
+    31,
+    32,
 ]
 SWITCH_PINS = [
-    13,
-    14,
-    15
+    33,
+    35
 ]
 
 
@@ -87,7 +86,6 @@ def sensorData():
     return [0,0]
 
 def main(hostname, ip):
-    print "main_client.main()"
     global HOSTNAME
     global IP
     HOSTNAME = hostname
@@ -96,10 +94,9 @@ def main(hostname, ip):
     GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
     for pin in SENSOR_PINS:
         print "sensorPin=", pin
-        GPIO.setup(24,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
     msg = "%s|%s" % (HOSTNAME, IP)
     while SERVER_IP == "":
         broadcastIpToServer(msg)
         time.sleep(1)
-    #recvFromServer()
 
