@@ -61,7 +61,7 @@ def Recv():
     global lastContactTime
     host = '' 
     port = 50000 
-    backlog = 5 
+    backlog = 10
     size = 1024 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     s.bind((host,port)) 
