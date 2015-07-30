@@ -79,8 +79,11 @@ class Client():
         self.pitch = pitch
 
 def Timer():
+    justhosts_l = clientmanager.clients.keys()
+    justhosts_l.sort()
+    justhosts_l = justhosts_l[1:] 
     while 1:
-        for host in clientmanager.clients:
+        for host in justhosts_l:
             print host
             if clientmanager.clients[host].present:
                 clientmanager.send(host, "++++++++")
@@ -97,4 +100,4 @@ def main(client_hostnames_l, clientPort):
     timer = threading.Thread(target=Timer)
     timer.start()
 
-main(['controller','ray1','ray2','ray3','ray4','ray5','ray6','ray7','ray8','ray9','ray10','ray11','ray12'],50000)
+main(['controller','ray01','ray02','ray03','ray04','ray05','ray06','ray07','ray08','ray09','ray10','ray11','ray12'],50000)

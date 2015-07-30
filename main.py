@@ -6,7 +6,7 @@
 import commands
 import socket
 
-hostnames = ['controller','ray1','ray2','ray3','ray4','ray5','ray6','ray7','ray8','ray9','ray10','ray11','ray12']
+hostnames = ['controller','ray01','ray02','ray03','ray04','ray05','ray06','ray07','ray08','ray09','ray10','ray11','ray12']
 staticIpAddresses = ['10.1.1.10','10.1.1.11','10.1.1.12','10.1.1.13','10.1.1.14','10.1.1.15','10.1.1.16','10.1.1.17','10.1.1.18','10.1.1.19','10.1.1.20','10.1.1.21','10.1.1.22',]
 
 cmd = "ip addr list eth0 |grep \"inet \" |cut -d' ' -f6|cut -d/ -f1"
