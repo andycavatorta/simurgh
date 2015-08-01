@@ -100,7 +100,7 @@ def endTurn():
 def getSensorData():
     socket =  False
     for p in SENSOR_PINS:
-        s = GPIO.input(p):
+        s = GPIO.input(p)
         print p, s
         if s:
             socket = p
