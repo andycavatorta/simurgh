@@ -104,7 +104,7 @@ def getSensorData():
         print p, s
         if s:
             socket = p
-            break
+            #break
     beats = 4
     if GPIO.input(SWITCH_PINS[0]):
         beats = 1
@@ -129,7 +129,7 @@ def main(hostname, ip):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(POWER_RELAY_PIN,GPIO.OUT)
     for pin in SENSOR_PINS:
-        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)    
+        GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_UP)    
     for pin in SWITCH_PINS:
         GPIO.setup(pin,GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
     controlloop = threading.Thread(target=ControlLoop)
