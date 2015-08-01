@@ -21,25 +21,12 @@ Andy:
     x sand doors
     x fetch breakout cables from TinkerSphere
     x add dynamic timing
+    x add melody detection
     add MIDI out
-    add melody detection
     work "offline" with static IPs or offline DHCP
     find location to test:
         get internet from 3rd floor to basement?
         buy superlong ether cable
-
-Rest (1/4)
-G (1/4)
-Bb (1/16)
-C (1/16)
-Eb (1/4)
-C (1/1)
-C (1/4)
-Eb (1/4)
-G (1/16)
-Bb (1/16)
-C (1/4)
-Bb (1/1)
 
 """
 import json
@@ -94,7 +81,6 @@ class ClientManager():
             except Exception as e:
                 self.clients[hostname].present = False
 
-
 class Client():
     def __init__(self, hostname):
         self.hostname = hostname
@@ -114,12 +100,38 @@ class Client():
 def makeMidiMsg(bulbNumber):
     print "makeMidiMsg:", bulbNumber
 
+def sendMIDI(channel, cmd, pitch, velocity):
+    pass
+
 def patternDetection():
     global HOSTS
     currentPattern = []
+    targetPattern = [
+        [False,4], # Rest
+        [False,4], # G
+        [False,1], # Bb
+        [False,1], # C
+        [False,4], # Eb
+        [False,16], # C 
+        [False,4], # C
+        [False,4], # Eb
+        [False,1], # G
+        [False,1], # Bb
+        [False,4], # C
+        [False,16], # Bb
+    ]
     for host in HOSTS:
         currentPattern.append([clientmanager.clients[host].pitch,clientmanager.clients[host].noteLength])
     print currentPattern
+    found_b = False
+    for i in range(12):
+        if currentPattern == targetPattern:
+            found_b = True
+            break
+        
+        currentPattern.insert(0, currentPattern.pop())
+    if found_b:
+        print "need to add MIDI msg when found"
 
 def ControlLoop():
     global HOSTS
