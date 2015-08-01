@@ -28,6 +28,7 @@ IP = ""
 SERVER_IP = ""
 POWER_RELAY_PIN = 38
 SENSOR_PINS = [
+    7,
     11,
     12,
     13,
@@ -103,11 +104,11 @@ def getSensorData():
         if GPIO.input(p):
             socket = p
             break
-    beats = 2
+    beats = 4
     if GPIO.input(SWITCH_PINS[0]):
         beats = 1
     if GPIO.input(SWITCH_PINS[1]):
-        beats = 4
+        beats = 16
     return [socket,beats]
 
 lastContactTime = 0

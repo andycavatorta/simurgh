@@ -1,12 +1,45 @@
 """
-What do the client and server talk about?
+Marina:
+    x finish painting
+    experiment with color circle application
+        apply color circles
 
-client->server:
-    broadcast to discover server
+Justyna & Ayo
+    single ray test:
+        secure components
+        add wiring
+        test one ray on network
 
-server->client:
-    turn { True | False }
-    request bulb and switch position
+Marina & Andy
+    finish all rays
+        secure components
+        complete cables
+        add wiring
+        test
+
+Andy:
+    x sand doors
+    x fetch breakout cables from TinkerSphere
+    x add dynamic timing
+    add MIDI out
+    add melody detection
+    work "offline" with static IPs or offline DHCP
+    find location to test:
+        get internet from 3rd floor to basement?
+        buy superlong ether cable
+
+Rest (1/4)
+G (1/4)
+Bb (1/16)
+C (1/16)
+Eb (1/4)
+C (1/1)
+C (1/4)
+Eb (1/4)
+G (1/16)
+Bb (1/16)
+C (1/4)
+Bb (1/1)
 
 """
 import json
@@ -16,11 +49,10 @@ import time
 import threading
  
 BEAT_PERIOD = 0.25
+HOSTS = []
 clientmanager = False
 
-# move to thread
 def Recv():
-    #print "main_server.py Recv() 2"
     MCAST_GRP = '224.0.0.1'
     MCAST_PORT = 10000
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -32,7 +64,7 @@ def Recv():
         msg = sock.recv(1024)
         clienthost, clientip = msg.split("|")
         clientmanager.setPresence(clienthost, clientip)
-        print "main_server.py Recv() 2", clienthost, clientip
+        #print "main_server.py Recv() 2", clienthost, clientip
 
 class ClientManager():
     def __init__(self, hostnames_l,clientPort):
@@ -47,7 +79,7 @@ class ClientManager():
         else:
             self.clients[hostname].present = True
             self.clients[hostname].ip = b_ip
-        print repr(self.clients[hostname].__dict__)
+        #print repr(self.clients[hostname].__dict__)
     def send(self, hostname, msg):
         client = self.clients[hostname]
         if self.clients[hostname].present:
@@ -57,7 +89,7 @@ class ClientManager():
                 s.send(msg) 
                 data = s.recv(self.maxMsgSize) 
                 s.close() 
-                print data
+                #print hostname, msg, data
                 return data
             except Exception as e:
                 self.clients[hostname].present = False
@@ -68,8 +100,8 @@ class Client():
         self.hostname = hostname
         self.ip = ""
         self.present = False
-        self.noteLength = 2 # [ 1,2,4 ]
-        self.pitch = 0 # [0,1,2,3,4,5,6,7,8]
+        self.noteLength = 4 # [ 1,4,16 ]
+        self.pitch = False # [0,1,2,3,4,5,6,7,8,9,10,11]
     def setPresent(self, b):
         self.present = b
     def setIp(self, ip):
@@ -79,33 +111,48 @@ class Client():
     def setPitch(self,pitch):
         self.pitch = pitch
 
+def makeMidiMsg(bulbNumber):
+    print "makeMidiMsg:", bulbNumber
+
+def patternDetection():
+    global HOSTS
+    currentPattern = []
+    for host in HOSTS:
+        currentPattern.append([clientmanager.clients[host].pitch,clientmanager.clients[host].noteLength])
+    print currentPattern
+
 def ControlLoop():
-    justhosts_l = clientmanager.clients.keys()
-    justhosts_l.sort()
-    justhosts_l = justhosts_l[1:]
+    global HOSTS
     # msgs = ["startTurn","endTurn","sensorData"]
     while 1:
-        for hi in range(len(justhosts_l)):
-            host_previous = justhosts_l[ hi - 1 ] 
-            host_current = justhosts_l[ hi ]
-            host_next = justhosts_l[ hi  - (len(justhosts_l)-1) ]
-
-            print "host_previous",host_previous
-            print "host_current", host_current
-            print "host_next",host_next
-            print 
+        for hi in range(len(HOSTS)):
+            host_previous = HOSTS[ hi - 1 ] 
+            host_current = HOSTS[ hi ]
+            host_next = HOSTS[ hi  - (len(HOSTS)-1) ]
 
             if clientmanager.clients[host_previous].present:
                 clientmanager.send(host_previous, "endTurn")
             if clientmanager.clients[host_current].present:
+                makeMidiMsg(clientmanager.clients[host_current].pitch)
                 clientmanager.send(host_current, "startTurn")
             if clientmanager.clients[host_next].present:
-                clientmanager.send(host_next, "getSensorData")
-            turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD       
+                sd_json = clientmanager.send(host_next, "getSensorData")
+                sd_l = json.loads(sd_json)
+                print host_next, sd_l
+                clientmanager.clients[host_next].setPitch(sd_l[0])
+                clientmanager.clients[host_next].setNoteLength(sd_l[1])
+                patternDetection()
+            turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD 
             time.sleep(turnPeriod)
 
 def main(client_hostnames_l, clientPort):
     global clientmanager
+    global HOSTS
+
+    HOSTS = client_hostnames_l
+    HOSTS.sort()
+    HOSTS = HOSTS[1:]
+
     clientmanager = ClientManager(client_hostnames_l,clientPort)
     recv = threading.Thread(target=Recv)
     recv.start()
