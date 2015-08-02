@@ -99,11 +99,12 @@ def endTurn():
 
 def getSensorData():
     socket =  False
-    for p in SENSOR_PINS:
+    for i in range(len(SENSOR_PINS)):
+        p = SENSOR_PINS[i]
         s = GPIO.input(p)
         print p, s
-        if s:
-            socket = p
+        if s == 0:
+            socket = i
             #break
     beats = 4
     if GPIO.input(SWITCH_PINS[0]):
