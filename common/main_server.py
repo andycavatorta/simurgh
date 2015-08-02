@@ -137,25 +137,27 @@ def ControlLoop():
     global HOSTS
     # msgs = ["startTurn","endTurn","sensorData"]
     while 1:
-        for hi in range(len(HOSTS)):
-            host_previous = HOSTS[ hi - 1 ] 
-            host_current = HOSTS[ hi ]
-            host_next = HOSTS[ hi  - (len(HOSTS)-1) ]
-
-            if clientmanager.clients[host_previous].present:
-                clientmanager.send(host_previous, "endTurn")
-            if clientmanager.clients[host_current].present:
-                makeMidiMsg(clientmanager.clients[host_current].pitch)
-                clientmanager.send(host_current, "startTurn")
-            if clientmanager.clients[host_next].present:
-                sd_json = clientmanager.send(host_next, "getSensorData")
-                sd_l = json.loads(sd_json)
-                print host_next, sd_l
-                clientmanager.clients[host_next].setPitch(sd_l[0])
-                clientmanager.clients[host_next].setNoteLength(sd_l[1])
-                patternDetection()
-            turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD 
-            time.sleep(turnPeriod)
+        try:
+            for hi in range(len(HOSTS)):
+                host_previous = HOSTS[ hi - 1 ] 
+                host_current = HOSTS[ hi ]
+                host_next = HOSTS[ hi  - (len(HOSTS)-1) ]
+                if clientmanager.clients[host_previous].present:
+                    clientmanager.send(host_previous, "endTurn")
+                if clientmanager.clients[host_current].present:
+                    makeMidiMsg(clientmanager.clients[host_current].pitch)
+                    clientmanager.send(host_current, "startTurn")
+                if clientmanager.clients[host_next].present:
+                    sd_json = clientmanager.send(host_next, "getSensorData")
+                    sd_l = json.loads(sd_json)
+                    print host_next, sd_l
+                    clientmanager.clients[host_next].setPitch(sd_l[0])
+                    clientmanager.clients[host_next].setNoteLength(sd_l[1])
+                    patternDetection()
+                turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD 
+                time.sleep(turnPeriod)
+        except Exception as e:
+            print "exception in main_server ControlLoop:", e
 
 def main(client_hostnames_l, clientPort):
     global clientmanager
