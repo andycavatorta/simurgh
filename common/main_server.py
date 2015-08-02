@@ -1,14 +1,29 @@
 """
+task list:
+    each ray:
+        secure components:
+            power supply
+            power strip
+            terminal strips
+            raspberry pi 
+            sockets x 12
+            sensors x 12
+            power relay
+        wiring
+            bulb power cables
+            sensors
+                emmiters - vcc,gnd 
+                detectors - vcc,gnd, signal
+            relay, transistor
+            add power cord to power supply
+
+
+
 Marina:
     x finish painting
+    add tobble switchs
     experiment with color circle application
         apply color circles
-
-Justyna & Ayo
-    single ray test:
-        secure components
-        add wiring
-        test one ray on network
 
 Marina & Andy
     finish all rays

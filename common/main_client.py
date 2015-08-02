@@ -114,7 +114,7 @@ def getSensorData():
     return [socket,beats]
 
 lastContactTime = 0
-serverTimeout = 5.0
+serverTimeout = 10.0
 def ControlLoop():
     while 1:
         if SERVER_IP == "" or time.time() - lastContactTime > serverTimeout: # if server is missing
