@@ -20,7 +20,10 @@ if IP:
     #cmd = "cd /home/pi/simurgh/ && git pull -q --all -p"
     #resp = commands.getstatusoutput(cmd)
     #email IP
-    from common import  emailIp
+    try:
+        from common import  emailIp
+    except Exception as email:
+        print "exception in main.py", e
 else:
     staticIpAddress = staticIpAddresses[hostnames.index(HOSTNAME)]
     cmd = "ip addr add %s dev eth0" % (staticIpAddress)

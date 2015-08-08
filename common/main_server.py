@@ -20,8 +20,6 @@ task list:
 
 
 Marina:
-    x finish painting
-    add tobble switchs
     experiment with color circle application
         apply color circles
 
@@ -33,10 +31,7 @@ Marina & Andy
         test
 
 Andy:
-    x sand doors
-    x fetch breakout cables from TinkerSphere
-    x add dynamic timing
-    x add melody detection
+    add resistors to power supplies?
     add MIDI out
     work "offline" with static IPs or offline DHCP
     find location to test:
@@ -49,10 +44,22 @@ import socket
 import struct
 import time
 import threading
+import mido
+import sys
  
-BEAT_PERIOD = 0.25
+BEAT_PERIOD = 0.10
 HOSTS = []
 clientmanager = False
+lastMidiPitch = 0
+midiChannel = 0
+
+midiOutputs_l = mido.get_output_names()
+if len(midiOutputs_l)  < 2:
+    print "MIDI Outputs not found.  Check USB connection."
+    sys.exit(0)
+else:
+    MIDI_PORT = mido.open_output(midiOutputs_l[0])
+
 
 def Recv():
     MCAST_GRP = '224.0.0.1'
@@ -113,27 +120,45 @@ class Client():
         self.pitch = pitch
 
 def makeMidiMsg(bulbNumber):
-    print "makeMidiMsg:", bulbNumber
+    global lastMidiPitch
+    # last note off
+    sendMIDI(midiChannel, "note_off", lastMidiPitch, 0)
+    # new note on
+    if bulbNumber != False:
+        midiPitch = bulbNumber + 63
+    else:
+        midiPitch = 0
+    print "makeMidiMsg:", midiPitch
+    sendMIDI(midiChannel, "note_on", midiPitch, 100)
+    lastMidiPitch = midiPitch
+        
+def sendSuccessSignal():
+    pass
+    #mido.Message('note_on', note=100, velocity=100)
 
 def sendMIDI(channel, cmd, pitch, velocity):
-    pass
-
+    try:
+        msg = mido.Message(cmd, channel=channel, note=pitch, velocity=velocity)
+        MIDI_PORT.send(msg)
+    except Exception as e:
+        print "exception in main_server sendMIDI:", e
+        
 def patternDetection():
     global HOSTS
     currentPattern = []
     targetPattern = [
         [False,4], # Rest
-        [False,4], # G
-        [False,1], # Bb
-        [False,1], # C
-        [False,4], # Eb
-        [False,16], # C 
-        [False,4], # C
-        [False,4], # Eb
-        [False,1], # G
-        [False,1], # Bb
-        [False,4], # C
-        [False,16], # Bb
+        [4,4], # G 4
+        [7,1], # Bb  7
+        [9,1], # C 9
+        [0,4], # Eb 0
+        [9,16], # C  9
+        [9,4], # C 9
+        [0,4], # Eb 0
+        [4,1], # G 4
+        [7,1], # Bb 7
+        [9,4], # C 9
+        [7,16], # Bb 7
     ]
     for host in HOSTS:
         currentPattern.append([clientmanager.clients[host].pitch,clientmanager.clients[host].noteLength])
@@ -146,7 +171,7 @@ def patternDetection():
         
         currentPattern.insert(0, currentPattern.pop())
     if found_b:
-        print "need to add MIDI msg when found"
+        sendSuccessSignal()
 
 def ControlLoop():
     global HOSTS
@@ -172,7 +197,7 @@ def ControlLoop():
                 turnPeriod = clientmanager.clients[host_current].noteLength * BEAT_PERIOD 
                 time.sleep(turnPeriod)
         except Exception as e:
-            print "exception in main_server ControlLoop:", e
+            print "exception in main_server ControlLoop:", e, sd_json 
 
 def main(client_hostnames_l, clientPort):
     global clientmanager
