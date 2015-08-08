@@ -22,7 +22,7 @@ if IP:
     #email IP
     try:
         from common import  emailIp
-    except Exception as email:
+    except Exception as e:
         print "exception in main.py", e
 else:
     staticIpAddress = staticIpAddresses[hostnames.index(HOSTNAME)]
